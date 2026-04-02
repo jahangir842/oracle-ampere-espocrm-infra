@@ -61,6 +61,7 @@ services:
       - postgres
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=proxy_net"
       - "traefik.http.routers.espocrm.rule=Host(`${CRM_DOMAIN}`)"
       - "traefik.http.routers.espocrm.entrypoints=websecure"
       - "traefik.http.routers.espocrm.tls.certresolver=myresolver"
@@ -82,6 +83,7 @@ services:
       - proxy_net
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=proxy_net"
       - "traefik.http.routers.n8n.rule=Host(`${N8N_DOMAIN}`)"
       - "traefik.http.routers.n8n.entrypoints=websecure"
       - "traefik.http.routers.n8n.tls.certresolver=myresolver"
@@ -135,3 +137,4 @@ networks:
     driver: bridge
   proxy_net:
     driver: bridge
+    name: proxy_net
