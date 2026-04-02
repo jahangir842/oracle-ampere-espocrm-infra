@@ -1,0 +1,3 @@
+.env
+espocrm_data/
+postgres_data/
