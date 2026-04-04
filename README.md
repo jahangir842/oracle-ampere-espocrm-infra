@@ -174,16 +174,6 @@ All services use Docker volumes:
 
 ---
 
-## 📩 Hiring / Contribution
-
-When applying or contributing:
-
-* Start your message with **"TYPE"**
-* Share similar systems you’ve built
-* Highlight relevant DevOps / automation experience
-
----
-
 # 🧠 Apollo Credit Optimization (Triple-Gate Logic)
 
 Since Apollo Free Tier is limited (~75 credits/month), the workflow enforces strict usage control:
