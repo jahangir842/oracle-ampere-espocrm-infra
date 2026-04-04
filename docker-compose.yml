@@ -47,7 +47,7 @@ services:
     restart: always
     environment:
       ESPOCRM_DATABASE_PLATFORM: Postgresql
-      ESPOCRM_DATABASE_HOST: postgres
+      ESPOCRM_DATABASE_HOST: postgres_db
       ESPOCRM_DATABASE_USER: ${DB_USER}
       ESPOCRM_DATABASE_PASSWORD: ${DB_PASSWORD}
       ESPOCRM_DATABASE_NAME: ${DB_NAME}
