@@ -219,148 +219,6 @@ N8N_ENCRYPTION_KEY=generate_a_random_string_here
 ### **2. The Production `docker-compose.yml`**
 Change the docker images to ARM64-compatible containers, links them to the database, and sets up all the Traefik routing rules for your subdomains.
 
-```yaml
-version: '3.8'
-
-services:
-  # Traefik Reverse Proxy (Handles SSL & Subdomains)
-  traefik:
-    image: traefik:v2.10
-    container_name: traefik
-    restart: always
-    command:
-      - "--api.insecure=false"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      # Global HTTP -> HTTPS Redirect
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      # Let's Encrypt Configuration
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=${ACME_EMAIL}"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "traefik_letsencrypt:/letsencrypt"
-    networks:
-      - proxy_net
-
-  # Database
-  postgres:
-    image: postgres:15-alpine
-    container_name: postgres_db
-    restart: always
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    networks:
-      - internal_net
-
-  # CRM
-  espocrm:
-    image: espocrm/espocrm:latest
-    container_name: espocrm
-    restart: always
-    environment:
-      ESPOCRM_DATABASE_PLATFORM: Postgresql
-      ESPOCRM_DATABASE_HOST: postgres
-      ESPOCRM_DATABASE_USER: ${DB_USER}
-      ESPOCRM_DATABASE_PASSWORD: ${DB_PASSWORD}
-      ESPOCRM_DATABASE_NAME: ${DB_NAME}
-      ESPOCRM_SITE_URL: "https://${CRM_DOMAIN}"
-    volumes:
-      - espocrm_data:/var/www/html
-    networks:
-      - internal_net
-      - proxy_net
-    depends_on:
-      - postgres
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.espocrm.rule=Host(`${CRM_DOMAIN}`)"
-      - "traefik.http.routers.espocrm.entrypoints=websecure"
-      - "traefik.http.routers.espocrm.tls.certresolver=myresolver"
-      - "traefik.http.services.espocrm.loadbalancer.server.port=80"
-
-  # Automation Engine
-  n8n:
-    image: docker.n8n.io/n8nio/n8n:latest
-    container_name: n8n
-    restart: always
-    environment:
-      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
-      - WEBHOOK_URL=https://${N8N_DOMAIN}/
-      - GENERIC_TIMEZONE=Europe/London
-    volumes:
-      - n8n_data:/home/node/.n8n
-    networks:
-      - internal_net
-      - proxy_net
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.n8n.rule=Host(`${N8N_DOMAIN}`)"
-      - "traefik.http.routers.n8n.entrypoints=websecure"
-      - "traefik.http.routers.n8n.tls.certresolver=myresolver"
-      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
-
-  # Monitoring
-  uptime-kuma:
-    image: louislam/uptime-kuma:1
-    container_name: uptime_kuma
-    restart: always
-    volumes:
-      - uptime_kuma_data:/app/data
-    networks:
-      - proxy_net
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.uptimekuma.rule=Host(`${STATUS_DOMAIN}`)"
-      - "traefik.http.routers.uptimekuma.entrypoints=websecure"
-      - "traefik.http.routers.uptimekuma.tls.certresolver=myresolver"
-      - "traefik.http.services.uptimekuma.loadbalancer.server.port=3001"
-
-  # Management Dashboard
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: portainer
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    networks:
-      - proxy_net
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_DOMAIN}`)"
-      - "traefik.http.routers.portainer.entrypoints=websecure"
-      - "traefik.http.routers.portainer.tls.certresolver=myresolver"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-
-# Persistent Storage Volumes
-volumes:
-  traefik_letsencrypt:
-  db_data:
-  espocrm_data:
-  n8n_data:
-  uptime_kuma_data:
-  portainer_data:
-
-# Networks: One for internal DB chatter, one for public web proxy
-networks:
-  internal_net:
-    driver: bridge
-  proxy_net:
-    driver: bridge
-```
-
 ### **A Crucial DevOps Note for Oracle Deployment**
 
 When you eventually deploy this on the Oracle instance, Traefik will handle all the reverse proxying and SSL generation automatically. However, **Let's Encrypt will fail to generate certificates if ports 80 and 443 are blocked**.
@@ -378,3 +236,22 @@ Before running `docker compose up -d` on the live server, you must ensure two th
 
 ---
 
+I am on the Apollo Free Tier, which only gives me 900 credits per year (~75/month).
+Because credits are so limited, please build the "Master Workflow" with the following Triple-Gate Logic to protect my account:
+1. The Deduplication Gate (CRM Check First):
+Before calling the Apollo API, n8n must query EspoCRM.
+If the Lead/Email already exists in our CRM, STOP. Do not call Apollo.
+Use the existing data to trigger the Sendpilot outreach.
+2. The Qualification Gate (Lead Scoring):
+We are targeting Private Investors. Please add a "Filter" node that only proceeds to Apollo if the lead meets these exact criteria:
+Job Title contains: "Partner", "Director", "Angel", "VC", or "Family Office".
+Location: United Kingdom (preferred).
+If they don't match, log them as "Low Priority" in the CRM and DO NOT use an Apollo credit.
+3. The "Daily Drip" & Hard Ceiling:
+To prevent accidental credit exhaustion, please add a Limit/Function node to the workflow:
+Daily Cap: Maximum of 3 Apollo API calls per day.
+Alert: If the daily limit is reached, send me a Slack/Telegram notification and queue the remaining leads for the next day.
+
+4. API Node Configuration:
+Please use the "Reveal" or "Enrichment" API call, not an "Export" call (to keep credit costs at 1 per lead).
+Ensure we are only pulling the LinkedIn URL and Primary Email. We do not need mobile numbers (which cost 8x more credits).
