@@ -1,7 +1,7 @@
 services:
   # Traefik Reverse Proxy (Handles SSL & Subdomains)
   traefik:
-    image: traefik:v2.10
+    image: traefik:v3.6
     container_name: traefik
     restart: always
     command:
@@ -28,7 +28,7 @@ services:
 
   # Database
   postgres:
-    image: postgres:15-alpine
+    image: postgres:17-alpine
     container_name: postgres_db
     restart: always
     environment:
@@ -91,7 +91,7 @@ services:
 
   # Monitoring
   uptime-kuma:
-    image: louislam/uptime-kuma:1
+    image: louislam/uptime-kuma:2
     container_name: uptime_kuma
     restart: always
     volumes:
