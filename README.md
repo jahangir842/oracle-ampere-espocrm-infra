@@ -1,4 +1,4 @@
-# 🚀 Oracle Ampere EspoCRM & n8n Infrastructure
+# 🚀 EspoCRM & n8n Infrastructure
 
 ![Platform](https://img.shields.io/badge/Platform-Oracle%20Cloud%20Always%20Free-blue)
 ![Architecture](https://img.shields.io/badge/Architecture-ARM64%20\(Ampere%20A1\)-orange)
@@ -8,7 +8,7 @@
 ![Status](https://img.shields.io/badge/Status-Production--Ready-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-A fully self-hosted, **zero-cost lead generation and CRM platform** running on Oracle Cloud Always Free Tier (Ampere A1).
+A fully self-hosted, **Lead generation and CRM platform**.
 Built for **automation, reliability, and scalability** without recurring infrastructure costs.
 
 ---
