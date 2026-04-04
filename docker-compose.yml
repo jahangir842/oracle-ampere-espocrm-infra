@@ -42,7 +42,7 @@ services:
 
   # CRM
   espocrm:
-    image: espocrm/espocrm:latest
+    image: espocrm/espocrm:9.3.4
     container_name: espocrm
     restart: always
     environment:
@@ -69,7 +69,7 @@ services:
 
   # Automation Engine
   n8n:
-    image: docker.n8n.io/n8nio/n8n:latest
+    image: docker.n8n.io/n8nio/n8n:2.14.2
     container_name: n8n
     restart: always
     environment:
@@ -107,7 +107,7 @@ services:
 
   # Management Dashboard
   portainer:
-    image: portainer/portainer-ce:latest
+    image: image: portainer/portainer-ce:2.39.1
     container_name: portainer
     restart: always
     volumes:
