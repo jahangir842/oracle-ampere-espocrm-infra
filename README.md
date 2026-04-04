@@ -1,30 +1,23 @@
-# 🚀 EspoCRM & n8n Infrastructure
+# 🚀 EspoCRM & n8n Automation
 
-![Platform](https://img.shields.io/badge/Platform-Oracle%20Cloud%20Always%20Free-blue)
-![Architecture](https://img.shields.io/badge/Architecture-ARM64%20\(Ampere%20A1\)-orange)
-![Docker](https://img.shields.io/badge/Container-Docker-blue)
-![Automation](https://img.shields.io/badge/Automation-n8n-red)
-![CRM](https://img.shields.io/badge/CRM-EspoCRM-green)
-![Status](https://img.shields.io/badge/Status-Production--Ready-brightgreen)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
+**Platform Architecture | Docker | Automation | CRM | Status | License**
 
-A fully self-hosted, **Lead generation and CRM platform**.
-Built for **automation, reliability, and scalability** without recurring infrastructure costs.
+A fully self-hosted **lead generation and CRM platform**—built for automation, reliability, and scalability, without recurring infrastructure costs.
 
 ---
 
 ## ⚡ Tech Stack
 
-| Layer          | Tool                                    |
-| -------------- | --------------------------------------- |
-| Infrastructure | Oracle Cloud (Ubuntu ARM64 – Ampere A1) |
-| Automation     | n8n                                     |
-| CRM            | EspoCRM                                 |
-| Database       | PostgreSQL 15                           |
-| Monitoring     | Uptime Kuma                             |
-| Management     | Portainer CE                            |
-| Reverse Proxy  | Traefik / Nginx                         |
-| SSL            | Let’s Encrypt                           |
+| Layer          | Tool            |
+| -------------- | --------------- |
+| Infrastructure | Ubuntu / Linux  |
+| Automation     | n8n             |
+| CRM            | EspoCRM         |
+| Database       | PostgreSQL 15   |
+| Monitoring     | Uptime Kuma     |
+| Management     | Portainer CE    |
+| Reverse Proxy  | Traefik / Nginx |
+| SSL            | Let’s Encrypt   |
 
 ---
 
@@ -32,13 +25,13 @@ Built for **automation, reliability, and scalability** without recurring infrast
 
 ### 🔄 Automation First
 
-* End-to-end lead pipeline (capture → enrich → qualify → CRM → outreach)
-* API-efficient enrichment logic (saves credits)
+* End-to-end lead pipeline: **capture → enrich → qualify → CRM → outreach**
+* API-efficient enrichment logic (minimizes credit usage)
 * Built-in duplicate prevention
 
 ### 🌐 Production Ready
 
-* Reverse proxy with automatic SSL
+* Reverse proxy with automatic SSL (Let’s Encrypt)
 * Clean subdomain routing:
 
   * `n8n.yourdomain.com`
@@ -49,23 +42,23 @@ Built for **automation, reliability, and scalability** without recurring infrast
 ### 🛡️ Reliability
 
 * Docker auto-restart (`restart: always`)
-* Oracle idle prevention cron job
 * External uptime monitoring endpoint
 
 ### 💾 Backup System
 
-* Daily automated DB backups
+* Daily automated database backups
 * Supports Google Drive / AWS S3
 * Restore instructions included
 
 ### 🎯 Lead Quality Control
 
-* Scoring before outreach
-* Example filters:
+* Pre-outreach lead scoring
 
-  * LinkedIn URL required
-  * Company data required
-  * UK-based leads preferred
+**Example filters:**
+
+* LinkedIn URL required
+* Company data required
+* UK-based leads preferred
 
 ### 🔍 Manual Approval (Optional)
 
@@ -76,11 +69,11 @@ Built for **automation, reliability, and scalability** without recurring infrast
 
 ## ⚙️ Quick Start
 
-### 1️⃣ Clone the Repo
+### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/oracle-ampere-espocrm-infra.git
-cd oracle-ampere-espocrm-infra
+git clone https://github.com/YOUR-USERNAME/espocrm-n8n-type.git
+cd espocrm-n8n-type
 ```
 
 ### 2️⃣ Setup Environment
@@ -111,27 +104,27 @@ docker compose up -d
 
 ## 🔁 Master Workflow (n8n)
 
-### Flow Summary
+### Flow Overview
 
 1. **Lead Capture**
 
    * Google Sheets trigger or Webhook
 
-2. **Duplicate Check**
+2. **Deduplication Check**
 
    * Query EspoCRM before processing
 
 3. **Smart Enrichment**
 
-   * Apollo API (only if required fields missing)
+   * Apollo API (only if required fields are missing)
 
 4. **Lead Scoring**
 
-   * Filters applied before outreach
+   * Apply filters before outreach
 
 5. **CRM Sync**
 
-   * Create / update lead in EspoCRM
+   * Create/update lead in EspoCRM
 
 6. **Outreach Trigger**
 
@@ -148,7 +141,7 @@ docker compose up -d
 * ✅ Single Docker Compose setup
 * ✅ HTTPS (Let’s Encrypt SSL)
 * ✅ Persistent storage (Docker volumes)
-* ✅ Fully working n8n workflow
+* ✅ Fully functional n8n workflow
 * ✅ Backup & restore system
 * ✅ Handover documentation / Loom guide
 
@@ -159,8 +152,8 @@ docker compose up -d
 All services use Docker volumes:
 
 * PostgreSQL data persists across restarts
-* n8n workflows محفوظ (safe)
-* CRM data retained even after server reboot
+* n8n workflows remain محفوظ (safe)
+* CRM data retained after server reboot
 
 ---
 
@@ -176,7 +169,6 @@ All services use Docker volumes:
 ## 🛠️ Requirements
 
 * Docker & Docker Compose
-* Oracle Cloud Free Tier account
 * Domain name (for subdomains + SSL)
 * Basic Linux knowledge
 
@@ -186,72 +178,69 @@ All services use Docker volumes:
 
 When applying or contributing:
 
-* Start your message with **"AMPERE"**
+* Start your message with **"TYPE"**
 * Share similar systems you’ve built
 * Highlight relevant DevOps / automation experience
 
 ---
 
-## Depoyment to Oracle
+# 🧠 Apollo Credit Optimization (Triple-Gate Logic)
 
-### **1. The Production `.env` File**
-Because we are routing actual domains now, your `.env` file needs a few extra variables. Update your `.env.example` file in the repo to look like this:
-
-```ini
-# System Configuration
-ACME_EMAIL=your-email@example.com # Required for Let's Encrypt SSL expiry notices
-
-# Domain Names (Replace with your actual subdomains)
-N8N_DOMAIN=n8n.yourdomain.com
-CRM_DOMAIN=crm.yourdomain.com
-PORTAINER_DOMAIN=portainer.yourdomain.com
-STATUS_DOMAIN=status.yourdomain.com
-
-# PostgreSQL Database Credentials
-DB_USER=crm_admin
-DB_PASSWORD=supersecret_db_password
-DB_NAME=espocrm_db
-
-# n8n Configuration
-N8N_ENCRYPTION_KEY=generate_a_random_string_here
-```
-
-### **2. The Production `docker-compose.yml`**
-Change the docker images to ARM64-compatible containers, links them to the database, and sets up all the Traefik routing rules for your subdomains.
-
-### **A Crucial DevOps Note for Oracle Deployment**
-
-When you eventually deploy this on the Oracle instance, Traefik will handle all the reverse proxying and SSL generation automatically. However, **Let's Encrypt will fail to generate certificates if ports 80 and 443 are blocked**.
-
-Before running `docker compose up -d` on the live server, you must ensure two things are done:
-
-1.  **DNS Records:** Create `A Records` in your domain registrar for `n8n`, `crm`, `status`, and `portainer` pointing to the Oracle public IP.
-2.  **Oracle Firewall:** Go into the Oracle Cloud Console -> Virtual Cloud Networks -> Default Security List -> Add Ingress Rules for TCP ports `80` and `443`.
-3.  **Ubuntu Iptables:** Oracle's default Ubuntu images have local firewall rules that block web traffic. You will need to open them natively on the machine via your terminal:
-    ```bash
-    sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
-    sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT
-    sudo netfilter-persistent save
-    ```
+Since Apollo Free Tier is limited (~75 credits/month), the workflow enforces strict usage control:
 
 ---
 
-I am on the Apollo Free Tier, which only gives me 900 credits per year (~75/month).
-Because credits are so limited, please build the "Master Workflow" with the following Triple-Gate Logic to protect my account:
-1. The Deduplication Gate (CRM Check First):
-Before calling the Apollo API, n8n must query EspoCRM.
-If the Lead/Email already exists in our CRM, STOP. Do not call Apollo.
-Use the existing data to trigger the Sendpilot outreach.
-2. The Qualification Gate (Lead Scoring):
-We are targeting Private Investors. Please add a "Filter" node that only proceeds to Apollo if the lead meets these exact criteria:
-Job Title contains: "Partner", "Director", "Angel", "VC", or "Family Office".
-Location: United Kingdom (preferred).
-If they don't match, log them as "Low Priority" in the CRM and DO NOT use an Apollo credit.
-3. The "Daily Drip" & Hard Ceiling:
-To prevent accidental credit exhaustion, please add a Limit/Function node to the workflow:
-Daily Cap: Maximum of 3 Apollo API calls per day.
-Alert: If the daily limit is reached, send me a Slack/Telegram notification and queue the remaining leads for the next day.
+### 1️⃣ Deduplication Gate (CRM First)
 
-4. API Node Configuration:
-Please use the "Reveal" or "Enrichment" API call, not an "Export" call (to keep credit costs at 1 per lead).
-Ensure we are only pulling the LinkedIn URL and Primary Email. We do not need mobile numbers (which cost 8x more credits).
+* Query EspoCRM before Apollo
+* If lead/email exists → **STOP**
+* Trigger outreach using existing data
+
+---
+
+### 2️⃣ Qualification Gate (Lead Scoring)
+
+Only proceed if:
+
+* Job Title contains:
+  `Partner`, `Director`, `Angel`, `VC`, `Family Office`
+* Location: **United Kingdom (preferred)**
+
+If not:
+
+* Mark as **Low Priority** in CRM
+* ❌ Do NOT call Apollo
+
+---
+
+### 3️⃣ Daily Drip + Hard Limit
+
+* Max **3 Apollo API calls per day**
+* If limit reached:
+
+  * Send Slack/Telegram alert
+  * Queue remaining leads for next day
+
+---
+
+## 🔌 API Configuration
+
+* Use: **Reveal / Enrichment API**
+* Avoid: Export API
+
+**Data to fetch:**
+
+* LinkedIn URL
+* Primary Email
+
+**Do NOT fetch:**
+
+* Mobile numbers (high credit cost)
+
+---
+
+If you want, I can next:
+
+* Convert this into a **high-converting GitHub README (badges + visuals)**
+* Or design a **system architecture diagram + n8n workflow diagram**
+* Or optimize it for a **freelance proposal (Upwork/Fiverr)** 🚀
