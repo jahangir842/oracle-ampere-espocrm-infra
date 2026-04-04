@@ -1,7 +1,7 @@
 services:
   # Traefik Reverse Proxy (Handles SSL & Subdomains)
   traefik:
-    image: traefik:v2.10
+    image: traefik:v3.6
     container_name: traefik
     restart: always
     command:
@@ -28,7 +28,7 @@ services:
 
   # Database
   postgres:
-    image: postgres:15-alpine
+    image: postgres:17-alpine
     container_name: postgres_db
     restart: always
     environment:
@@ -42,12 +42,12 @@ services:
 
   # CRM
   espocrm:
-    image: espocrm/espocrm:latest
+    image: espocrm/espocrm:9.3.4
     container_name: espocrm
     restart: always
     environment:
       ESPOCRM_DATABASE_PLATFORM: Postgresql
-      ESPOCRM_DATABASE_HOST: postgres
+      ESPOCRM_DATABASE_HOST: postgres_db
       ESPOCRM_DATABASE_USER: ${DB_USER}
       ESPOCRM_DATABASE_PASSWORD: ${DB_PASSWORD}
       ESPOCRM_DATABASE_NAME: ${DB_NAME}
@@ -69,7 +69,10 @@ services:
 
   # Automation Engine
   n8n:
-    image: docker.n8n.io/n8nio/n8n:latest
+    image: docker.n8n.io/n8nio/n8n:2.14.2
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     container_name: n8n
     restart: always
     environment:
@@ -79,7 +82,7 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
     networks:
-      - internal_net
+ #     - internal_net
       - proxy_net
     labels:
       - "traefik.enable=true"
@@ -92,7 +95,7 @@ services:
       - "traefik.http.routers.n8n.middlewares=n8n-timeout"
   # Monitoring
   uptime-kuma:
-    image: louislam/uptime-kuma:1
+    image: louislam/uptime-kuma:2
     container_name: uptime_kuma
     restart: always
     volumes:
@@ -108,7 +111,7 @@ services:
 
   # Management Dashboard
   portainer:
-    image: portainer/portainer-ce:latest
+    image: portainer/portainer-ce:2.39.1
     container_name: portainer
     restart: always
     volumes:
@@ -136,6 +139,7 @@ volumes:
 networks:
   internal_net:
     driver: bridge
+    name: internal_net
   proxy_net:
     driver: bridge
     name: proxy_net
