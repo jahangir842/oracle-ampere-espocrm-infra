@@ -72,8 +72,8 @@ A fully self-hosted **lead generation and CRM platform**—built for automation,
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/espocrm-n8n-type.git
-cd espocrm-n8n-type
+git clone https://github.com/jahangir842/crm-n8n-automation.git
+cd espocrm-n8n
 ```
 
 ### 2️⃣ Setup Environment
