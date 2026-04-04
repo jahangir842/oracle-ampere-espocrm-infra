@@ -107,7 +107,7 @@ services:
 
   # Management Dashboard
   portainer:
-    image: image: portainer/portainer-ce:2.39.1
+    image: portainer/portainer-ce:2.39.1
     container_name: portainer
     restart: always
     volumes:
