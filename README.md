@@ -13,45 +13,6 @@ Built for **automation, reliability, and scalability** without recurring infrast
 
 ---
 
-## 🧱 Architecture Diagram
-
-```mermaid
-flowchart TD
-
-    A[Lead Source\n(Google Sheets / Webhook)] --> B[n8n Workflow Engine]
-
-    B --> C{Duplicate Check}
-    C -->|Exists| D[Skip / Update CRM]
-    C -->|New Lead| E[Smart Enrichment\nApollo API]
-
-    E --> F[Lead Scoring Logic]
-
-    F -->|Qualified| G[EspoCRM]
-    F -->|Not Qualified| H[Discard / Log]
-
-    G --> I[Sendpilot API\n(Outreach)]
-    I --> J[LinkedIn Campaign]
-
-    B --> K[Notifications\nSlack / Telegram / Discord]
-
-    subgraph Infra
-        L[Traefik / Nginx\nReverse Proxy + SSL]
-        M[PostgreSQL DB]
-        N[Uptime Kuma]
-        O[Portainer]
-    end
-
-    B --> M
-    G --> M
-
-    L --> B
-    L --> G
-    L --> N
-    L --> O
-```
-
----
-
 ## ⚡ Tech Stack
 
 | Layer          | Tool                                    |
