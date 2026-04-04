@@ -135,6 +135,7 @@ volumes:
 networks:
   internal_net:
     driver: bridge
+    name: internal_net
   proxy_net:
     driver: bridge
     name: proxy_net
